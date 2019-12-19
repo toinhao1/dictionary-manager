@@ -1,12 +1,19 @@
 import React from 'react';
+import { Route, Switch, } from 'react-router-dom';
 
 import Home from './components/home/home'
+import Header from './components/header/header'
+import CreateDictionary from './components/create-dictionary/create-dictionary'
 
 
-function App() {
+const App = () => {
   return (
     <div >
-      <Home />
+      <Header />
+      <Switch>
+        <Route exact path="/" component={Home} />
+        <Route path="/create" component={CreateDictionary} />
+      </Switch>
     </div>
   );
 }

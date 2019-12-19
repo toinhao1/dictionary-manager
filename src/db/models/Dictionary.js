@@ -2,12 +2,8 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const DictionarySchema = new Schema({
-  domain: {
-    type: Object,
-    required: true,
-  },
-  range: {
-    type: Object,
+  dictionary: {
+    type: Array,
     required: true,
   },
   date: {
