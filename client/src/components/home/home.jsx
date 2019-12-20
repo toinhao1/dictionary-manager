@@ -1,11 +1,30 @@
-import React from 'react'
+import React, { Component } from 'react'
+import { connect } from 'react-redux'
+import { fetchAllDictionarys } from '../../redux/dictionary/dictionary.actions'
+import HomeGrid from '../home-grid/home-grid'
 
-const Home = () => {
-  return (
-    <div>
-      Home Page
-    </div>
-  )
+
+class Home extends Component {
+  componentDidMount() {
+    this.props.displayAll()
+  }
+
+  render() {
+    console.log(this.props.allDictionarys)
+    return (
+      <>
+        <HomeGrid allDictionarys={this.props.allDictionarys} />
+      </>
+    )
+  }
 }
 
-export default Home;
+const mapStateToProps = ({ dictionary }) => ({
+  allDictionarys: dictionary.displayDictionarys
+})
+
+const mapDispatchToProps = dispatch => ({
+  displayAll: () => dispatch(fetchAllDictionarys())
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(Home);

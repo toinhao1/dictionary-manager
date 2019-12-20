@@ -5,6 +5,7 @@ import Home from './components/home/home'
 import Header from './components/header/header'
 import CreateDictionary from './components/create-dictionary/create-dictionary'
 
+import './app.scss'
 
 const App = () => {
   return (

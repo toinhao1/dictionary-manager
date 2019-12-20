@@ -1,11 +1,13 @@
 import React from 'react';
 import MaterialTable from 'material-table';
 import { connect } from 'react-redux'
+import { withRouter } from 'react-router-dom';
+
 import { Button } from '@material-ui/core'
 
 import { createDictionary } from '../../redux/dictionary/dictionary.actions'
 
-const CreateDictionary = ({ addDictionary }) => {
+const CreateDictionary = ({ createDictionary, history }) => {
   const [state, setState] = React.useState({
     columns: [
       { title: 'Domain', field: 'domain' },
@@ -15,11 +17,13 @@ const CreateDictionary = ({ addDictionary }) => {
       {},
     ],
   });
+
   const onSubmit = (e) => {
     e.preventDefault()
-    addDictionary(state.data)
+    createDictionary(state.data)
+    history.push('/')
   }
-  console.log(state.data)
+
   return (
     <form onSubmit={onSubmit}>
       <MaterialTable
@@ -70,8 +74,4 @@ const CreateDictionary = ({ addDictionary }) => {
   );
 }
 
-const mapDispatchToProps = dispatch => ({
-  addDictionary: dictionary => dispatch(createDictionary(dictionary))
-})
-
-export default connect(null, mapDispatchToProps)(CreateDictionary);
+export default withRouter(connect(null, { createDictionary })(CreateDictionary));

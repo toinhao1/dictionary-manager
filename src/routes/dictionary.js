@@ -6,8 +6,7 @@ const router = new express.Router();
 // Create a new dictionary
 router.post('/dictionarys', async (req, res) => {
   const dictionary = new Dictionary({
-    domain: req.body.domain,
-    range: req.body.range
+    dictionary: req.body
   });
 
   try {
@@ -23,7 +22,6 @@ router.post('/dictionarys', async (req, res) => {
 router.get('/dictionarys', async (req, res) => {
   try {
     const dictionaries = await Dictionary.find({})
-
     if (!dictionaries) {
       res.json("No dictionaries yet, please create one.")
     }
@@ -35,7 +33,7 @@ router.get('/dictionarys', async (req, res) => {
   }
 })
 
-// Grte on dictionary
+// Get one dictionary
 router.get('/dictionarys/:id', async (req, res) => {
   const _id = req.params.id;
 
