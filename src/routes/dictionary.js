@@ -54,22 +54,21 @@ router.get('/dictionarys/:id', async (req, res) => {
 
 // Update a dictionary
 router.patch('/dictionarys/:id', async (req, res) => {
-  const updates = Object.keys(req.body);
 
   try {
-    const dictionary = await Dictionary.findOne({
-      _id: req.params.id,
-    });
-    if (!dictionary) {
+    const updatedDictionary = await Dictionary.findByIdAndUpdate(
+      { _id: req.params.id },
+      { $set: { dictionary: req.body } },
+      { new: true }
+    ).exec()
+
+    if (!updatedDictionary) {
       return res.status(404).send();
     }
-    updates.forEach(update => {
-      dictionary[update] = req.body[update];
-    });
 
-    await dictionary.save();
+    await updatedDictionary.save();
 
-    res.status(201).send(dictionary);
+    res.status(200).send(updatedDictionary);
   } catch (err) {
     res.status(400).send(err);
   }

@@ -2,7 +2,7 @@ import DictionaryActionTypes from './dictionary.types'
 
 const initialState = {
   displayDictionarys: [],
-  currentDictionay: []
+  currentDictionary: []
 }
 
 const dictionaryReducer = (state = initialState, action) => {
@@ -11,7 +11,7 @@ const dictionaryReducer = (state = initialState, action) => {
     case (DictionaryActionTypes.CREATE_DICTIONARY):
       return {
         ...state,
-        displayDictionarys: action.payload
+        displayDictionarys: [...state.displayDictionarys, action.payload]
       }
 
     case (DictionaryActionTypes.GET_ALL_DICTIONARYS):
@@ -24,6 +24,22 @@ const dictionaryReducer = (state = initialState, action) => {
       return {
         ...state,
         displayDictionarys: state.displayDictionarys.filter(dictionary => dictionary._id !== action.payload)
+      }
+
+    case (DictionaryActionTypes.EDIT_DICTIONARY):
+      return {
+        ...state,
+        displayDictionarys: state.displayDictionarys.map(dictionary => {
+          return (dictionary._id === action.payload._id) ?
+            dictionary = action.payload
+            : dictionary
+        })
+      }
+
+    case (DictionaryActionTypes.GET_ONE_DICTIONARY):
+      return {
+        ...state,
+        currentDictionary: action.payload
       }
 
     default:

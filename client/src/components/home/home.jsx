@@ -10,7 +10,6 @@ class Home extends Component {
   }
 
   render() {
-    console.log(this.props.allDictionarys)
     return (
       <>
         <HomeGrid allDictionarys={this.props.allDictionarys} />
