@@ -5,6 +5,7 @@ import { withRouter } from 'react-router-dom';
 
 import { Button } from '@material-ui/core'
 
+// import { consistencyChecker } from '../../utils/consistencyChecker'
 import { createDictionary } from '../../redux/dictionary/dictionary.actions'
 
 const CreateDictionary = ({ createDictionary, history }) => {
@@ -16,10 +17,12 @@ const CreateDictionary = ({ createDictionary, history }) => {
     data: [
       {},
     ],
+    errorRows: [],
   });
 
   const onSubmit = (e) => {
     e.preventDefault()
+    // consistencyChecker(state.data)
     createDictionary(state.data)
     history.push('/')
   }
@@ -28,7 +31,9 @@ const CreateDictionary = ({ createDictionary, history }) => {
     <form onSubmit={onSubmit}>
       <MaterialTable
         title="Create A Dictionary"
-        options={{ search: false, sorting: false, paging: false }}
+        options={{
+          search: false, sorting: false, paging: false
+        }}
         columns={state.columns}
         data={state.data}
         editable={{

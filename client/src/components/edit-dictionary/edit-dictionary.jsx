@@ -5,6 +5,7 @@ import { withRouter } from 'react-router-dom';
 
 import { Button } from '@material-ui/core'
 
+// import { consistencyChecker } from '../../utils/consistencyChecker'
 import { editDictionary, getOneDictionary } from '../../redux/dictionary/dictionary.actions'
 
 class EditDictionary extends Component {
@@ -16,6 +17,7 @@ class EditDictionary extends Component {
         { title: 'Region', field: 'region' },
       ],
       data: [],
+      errorRows: [],
     }
   }
   componentDidMount() {
@@ -30,16 +32,27 @@ class EditDictionary extends Component {
 
   onSubmit = (e) => {
     e.preventDefault()
+    // const errors = consistencyChecker(this.state.data)
+    // console.log(errors)
+    // this.setState({ errorRows: errors })
+    // if (errors.length < 1) {
     this.props.editDictionary(this.props.match.params.id, this.state.data)
     this.props.history.push('/')
+    // }
   }
 
   render() {
+    console.log(this.state.errorRows)
     return (
       <form onSubmit={this.onSubmit}>
         <MaterialTable
           title="Edit This Dictionary"
-          options={{ search: false, sorting: false, paging: false }}
+          options={{
+            search: false, sorting: false, paging: false,
+            rowStyle: (rowData, index) => ({
+              backgroundColor: (this.state.errorRows && this.state.errorRows[0] === rowData.tableData.id) ? '#FOO' : '#FFF'
+            })
+          }}
           columns={this.state.columns}
           data={this.state.data}
           editable={{
