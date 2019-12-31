@@ -31,8 +31,6 @@ export const deleteDictionary = (id) => async dispatch => {
 export const editDictionary = (id, formData) => async dispatch => {
   const res = await axios.patch(`/dictionarys/${id}`, formData)
 
-  console.log(res.data)
-
   dispatch({
     type: DictionaryActionTypes.EDIT_DICTIONARY,
     payload: res.data

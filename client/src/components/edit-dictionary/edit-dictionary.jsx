@@ -5,7 +5,7 @@ import { withRouter } from 'react-router-dom';
 
 import { Button } from '@material-ui/core'
 
-// import { consistencyChecker } from '../../utils/consistencyChecker'
+import { consistencyChecker } from '../../utils/consistencyChecker'
 import { editDictionary, getOneDictionary } from '../../redux/dictionary/dictionary.actions'
 
 class EditDictionary extends Component {
@@ -17,7 +17,7 @@ class EditDictionary extends Component {
         { title: 'Region', field: 'region' },
       ],
       data: [],
-      errorRows: [],
+      errorRows: null,
     }
   }
   componentDidMount() {
@@ -32,25 +32,34 @@ class EditDictionary extends Component {
 
   onSubmit = (e) => {
     e.preventDefault()
-    // const errors = consistencyChecker(this.state.data)
-    // console.log(errors)
-    // this.setState({ errorRows: errors })
-    // if (errors.length < 1) {
-    this.props.editDictionary(this.props.match.params.id, this.state.data)
-    this.props.history.push('/')
-    // }
+    const errors = consistencyChecker(this.state.data)
+    if (errors.length < 1) {
+      this.props.editDictionary(this.props.match.params.id, this.state.data)
+      this.props.history.push('/')
+    }
+    this.setState({ errorRows: errors })
+    const displayErrorRows = errors.map(error => error + 1)
+    if (errors.length >= 1) {
+      alert(`Please resolve the issues on rows ${displayErrorRows}.`)
+    }
   }
 
   render() {
-    console.log(this.state.errorRows)
+    const { errorRows } = this.state
+    if (errorRows) {
+      var correctErrorRow = errorRows.length > 1 ? errorRows[1] : errorRows[0]
+    }
     return (
       <form onSubmit={this.onSubmit}>
         <MaterialTable
           title="Edit This Dictionary"
           options={{
-            search: false, sorting: false, paging: false,
-            rowStyle: (rowData, index) => ({
-              backgroundColor: (this.state.errorRows && this.state.errorRows[0] === rowData.tableData.id) ? '#FOO' : '#FFF'
+            disableClick: true,
+            search: false,
+            sorting: false,
+            paging: false,
+            rowStyle: rowData => ({
+              backgroundColor: (this.state.errorRows && correctErrorRow === rowData.tableData.id ? '#F00' : '#FFF')
             })
           }}
           columns={this.state.columns}
@@ -60,6 +69,7 @@ class EditDictionary extends Component {
               new Promise(resolve => {
                 setTimeout(() => {
                   resolve();
+                  this.setState({ errorRows: null })
                   this.setState(prevState => {
                     const data = [...prevState.data];
                     data.push(newData);
@@ -72,6 +82,7 @@ class EditDictionary extends Component {
                 setTimeout(() => {
                   resolve();
                   if (oldData) {
+                    this.setState({ errorRows: null })
                     this.setState(prevState => {
                       const data = [...prevState.data];
                       data[data.indexOf(oldData)] = newData;
